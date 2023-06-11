@@ -7,15 +7,17 @@ import authRoutes from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
+import mongoose from './models/userModel';
 
 
 //configure env
-dotenv.config();
+require('dotenv').config();
 
 //databse config
 connectDB();
 
 //rest object
+const mongoose = require('mongoose')
 const app = express();
 
 //middelwares
@@ -37,6 +39,17 @@ app.get("/", (req,res)=>{
 //PORT
 const PORT = process.env.PORT || 8080;
 
+mongoose.setMaxListeners('strictQuery' ,false);
+const connectDB = async ()=>{
+  try{
+        const conn = await mongoose.connect(process.env.MONGO_URI)
+        console.log(`MongoDB Connected: ${conn.connection.host}`)
+  }catch(error){
+    console.log(error)
+    process.exit(1);
+
+  }
+}
 //run listen
 app.listen(PORT, () => {
   console.log(
